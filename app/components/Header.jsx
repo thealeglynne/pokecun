@@ -10,15 +10,15 @@ export default function Header() {
         <Image
           src="https://cdn.worldvectorlogo.com/logos/pokemon-23.svg" 
           alt="Pokecunn Logo"
-          width={110}
-          height={110}
+          width={140}
+          height={140}
         />
 
       </div>
 
       <nav className={styles.nav}>
         <a
-          href="https://www.linkedin.com/in/tuusuario"
+          href="https://www.linkedin.com/in/alexander-quiroga-a992452b4/"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.link}
