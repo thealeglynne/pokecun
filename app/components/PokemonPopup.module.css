@@ -1,0 +1,62 @@
+/* components/PokemonPopup.module.css */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(13, 13, 13, 0.7);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+    overflow-y: hidden;
+  }
+  
+  .popup {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 400px;
+    color: var(--text-primary);
+    position: relative;
+    position: relative;
+    top: -20%;
+    overflow-y: hidden;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    cursor: pointer;
+  }
+  
+  .name {
+    text-transform: capitalize;
+    font-size: 2rem;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 700px) {
+    .popup {
+        background: var(--bg-card);
+        
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 2rem;
+        width: 80%;
+        max-width: 400px;
+        color: var(--text-primary);
+        position: relative;
+        position: relative;
+        top: -30%;
+      }
+  }

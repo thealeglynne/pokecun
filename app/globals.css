@@ -1,0 +1,96 @@
+
+:root {
+  --bg-main: #ffffff;
+  --bg-card: rgba(255, 255, 255, 0.643);
+  --text-primary: #393000;
+  --accent: #EE3030; 
+  --blue-accent: #EE3030; 
+  --border-color: rgb(255, 255, 255);
+}
+
+
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  
+  color: var(--text-primary);
+}
+
+main {
+  position: relative;
+  padding: 2rem;
+  min-height: 100vh;
+  overflow: hidden;
+  backdrop-filter: blur(6px);
+  z-index: 1;
+}
+
+main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url('https://i.pinimg.com/736x/2d/a3/e2/2da3e25b594272fadb7076899bcae1d6.jpg');
+  background-size:30%;
+  background-repeat: no-repeat;
+  background-position: right;
+  transform: rotate(0deg); 
+  transform-origin: center;
+  z-index: -1;
+}
+
+
+
+input, button {
+  transition: all 0.3s ease;
+}
+
+input {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid var(--border-color);
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+button {
+  background-color: var(--blue-accent);
+  color: #fff;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: var(--accent);
+}
+
+  
+  @media (max-width: 700px) {
+  
+    main {
+      padding: 2rem;
+      min-height: 100vh;
+      background-image: url('https://i.pinimg.com/474x/a1/fc/d1/a1fcd1987c919d6988da201886923a34.jpg'); /* Añade una imagen tipo tecnología o un fondo Pokémon */
+      background-size: cover;
+      background-position: center;
+      backdrop-filter: blur(6px);
+    }
+    main::before {
+      content: "";
+      display: none;
+      position: absolute;
+      inset: 0;
+      background-image: url('https://i.pinimg.com/736x/2d/a3/e2/2da3e25b594272fadb7076899bcae1d6.jpg');
+      background-size:30%;
+      background-repeat: no-repeat;
+      background-position: right;
+      transform: rotate(0deg); 
+      transform-origin: center;
+      z-index: -1;
+    }
+ 
+  }
+  

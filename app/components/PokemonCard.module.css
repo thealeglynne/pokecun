@@ -1,0 +1,53 @@
+/* components/PokemonCard.module.css */
+.card {
+  position: relative;
+  background-image: url("https://i.pinimg.com/474x/8f/77/11/8f77116e955bd2db5660141c3d59e527.jpg");
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-radius: 22px;
+  padding: 1.5rem;
+  max-width: 340px;
+  margin: 2rem auto;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 15px #EE3030;
+  transition: transform 0.3s ease;
+  background: none; /* Quitamos el fondo directo */
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("https://i.pinimg.com/474x/8f/77/11/8f77116e955bd2db5660141c3d59e527.jpg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  transform: rotate(180deg);
+  z-index: -1; /* Para que no tape el contenido */
+}
+
+  
+  .card:hover {
+    transform: scale(1.03);
+  }
+  
+  .name {
+    text-transform: capitalize;
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 1rem;
+  }
+  
+  .imageWrapper {
+    background: none;
+    border-radius: 50%;
+    padding: 10px;
+    display: inline-block;
+    margin-bottom: 1rem;
+  }
+  .nombrePokemon{
+    position: relative;
+    top: -40%;
+  }
