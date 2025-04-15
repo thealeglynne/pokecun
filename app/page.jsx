@@ -12,6 +12,8 @@ export default function Home() {
   const [pokemon, setPokemon] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [agentData, setAgentData] = useState(null);
+  const [isAgentLoading, setIsAgentLoading] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -23,6 +25,44 @@ export default function Home() {
     loadData();
   }, []);
 
+  const fetchAgentInfo = async (pokemonName) => {
+    try {
+      setIsAgentLoading(true);
+      setAgentData(null);
+      
+      const response = await fetch('/api/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: pokemonName }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error || 
+          `Error ${response.status}: ${response.statusText}`
+        );
+      }
+  
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+  
+      setAgentData(data);
+    } catch (err) {
+      console.error("Error fetching agent info:", err);
+      setAgentData({
+        summary: `Error al obtener información adicional: ${err.message}`,
+        error: true
+      });
+    } finally {
+      setIsAgentLoading(false);
+    }
+  };
   const fetchPokemon = async (identifier) => {
     try {
       const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${identifier.toLowerCase()}`);
@@ -30,9 +70,12 @@ export default function Home() {
       const data = await res.json();
       setPokemon(data);
       setError(null);
+      // Llamar al agente después de obtener el Pokémon
+      fetchAgentInfo(data.name);
     } catch (err) {
       setError('Pokémon no encontrado');
       setPokemon(null);
+      setAgentData(null);
     }
   };
 
@@ -45,8 +88,6 @@ export default function Home() {
   const handleSelectFromCarousel = (name) => {
     fetchPokemon(name);
   };
-
-  
 
   return (
     <main>
@@ -80,27 +121,27 @@ export default function Home() {
           marginBottom: '1rem'
         }}>
           <input
-  type="text"
-  placeholder="Nombre o número de tu Pokémon"
-  value={search}
-  onChange={(e) => setSearch(e.target.value)}
-  onKeyDown={(e) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  }}
-  style={{
-    backgroundColor: "#f200",
-    padding: '0.7rem 1rem',
-    fontSize: '1.2rem',
-    border: '1px solid #FFCC01',
-    borderRadius: '10px',
-    outline: 'none',
-    width: '70%',
-    fontFamily: 'Verdana, sans-serif',
-    color: '#333'
-  }}
-/>
+            type="text"
+            placeholder="Nombre o número de tu Pokémon"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleSearch();
+              }
+            }}
+            style={{
+              backgroundColor: "#f200",
+              padding: '0.7rem 1rem',
+              fontSize: '1.2rem',
+              border: '1px solid #FFCC01',
+              borderRadius: '10px',
+              outline: 'none',
+              width: '70%',
+              fontFamily: 'Verdana, sans-serif',
+              color: '#333'
+            }}
+          />
 
           <button onClick={handleSearch} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
             <Image
@@ -126,7 +167,59 @@ export default function Home() {
 
       {error && <p style={{ color: 'red', marginTop: '1rem', textAlign: 'center' }}>{error}</p>}
 
-      {pokemon && <PokemonCard pokemon={pokemon} />}
+      {pokemon && (
+        <>
+          <PokemonCard pokemon={pokemon} />
+          
+          {/* Sección de información del agente IA */}
+          <div style={{
+            maxWidth: '800px',
+            margin: '2rem auto',
+            padding: '1.5rem',
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+            border: '4px solid #EE3030'
+          }}>
+            <h3 style={{ 
+              color: '#333', 
+              marginBottom: '1rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}>
+             
+              Información Ampliada
+            </h3>
+            
+            {isAgentLoading ? (
+              <div style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '0.5rem',
+                color: '#666'
+              }}>
+                <Image 
+                  src="https://www.svgrepo.com/show/276264/pokeball-pokemon.svg" 
+                  width={20} 
+                  height={20} 
+                  style={{ animation: 'spin 1s linear infinite' }}
+                  alt="Cargando..."
+                />
+                Consultando a nuestro Poké-Asistente...
+              </div>
+            ) : (
+              <div style={{ 
+                color: '#555', 
+                lineHeight: '1.6',
+                whiteSpace: 'pre-line' 
+              }}>
+                {agentData?.summary || 'No hay información adicional disponible'}
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
       {pokemon?.id && (
         <>
@@ -138,8 +231,15 @@ export default function Home() {
         </>
       )}
 
-      <h2 style={{ marginTop: '3rem', textAlign: 'center', color:  '#EE3030' }}>Descubre otros Pokémon</h2>
+      <h2 style={{ marginTop: '3rem', textAlign: 'center', color: '#EE3030' }}>Descubre otros Pokémon</h2>
       <PokemonCarousel onSelect={handleSelectFromCarousel} />
+
+      <style jsx global>{`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </main>
   );
 }
